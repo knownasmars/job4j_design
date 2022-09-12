@@ -33,7 +33,8 @@ public class FlatMap<T> implements Iterator<T> {
         Iterator<Iterator<Integer>> data = List.of(
                 List.of(1, 2, 3).iterator(),
                 List.of(4, 5, 6).iterator(),
-                List.of(7, 8, 9).iterator()
+                List.of(7, 8, 9).iterator(),
+                List.of(10, 11, 12).iterator()
         ).iterator();
         FlatMap flat = new FlatMap(data);
         while (flat.hasNext()) {
