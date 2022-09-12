@@ -11,7 +11,7 @@ public class EvenNumbersIterator implements Iterator<Integer> {
     public EvenNumbersIterator(int[] data) {
         this.data = data;
     }
-//                new int[] {1, 3, 2, 3, 5, 5, 4, 5, 6, 7})
+
     @Override
     public boolean hasNext() {
         boolean rsl = false;
