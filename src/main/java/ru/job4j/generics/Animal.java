@@ -11,8 +11,8 @@ public class Animal<K, V> {
     @Override
     public String toString() {
         return "Animal{" +
-                "paws=" + paws +
-                ", family='" + family + '\'' +
+                "paws=" + paws + ", family='"
+                + family + '\'' +
                 '}';
     }
 }
