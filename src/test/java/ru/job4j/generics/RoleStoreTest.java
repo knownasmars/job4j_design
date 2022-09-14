@@ -25,7 +25,7 @@ class RoleStoreTest {
     void whenElementExistsThenNoChangeWillBeDone() {
         RoleStore role = new RoleStore();
         role.add(new Role("1", "TeamLead"));
-        role.add(new Role("1","SeniorDev"));
+        role.add(new Role("1", "SeniorDev"));
         Role result = role.findById("1");
         assertThat(result.getRoleName()).isEqualTo("TeamLead");
     }
