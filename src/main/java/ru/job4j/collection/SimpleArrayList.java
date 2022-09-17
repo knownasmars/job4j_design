@@ -25,18 +25,17 @@ public class SimpleArrayList<T> implements SimpleList<T> {
         modCount++;
     }
 
-    public void expandArray() {
+    private void expandArray() {
+        int newLength = size == 0 ? 10 : container.length * 2;
         this.container = Arrays.copyOf(
-                container, container.length * 2
+                container, newLength
         );
     }
 
     @Override
     public T set(int index, T newValue) {
-        T rsl = container[index];
-        Objects.checkIndex(index, size);
         container[index] = newValue;
-        return rsl;
+        return get(index);
     }
 
     @Override
