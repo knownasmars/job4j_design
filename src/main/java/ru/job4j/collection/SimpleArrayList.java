@@ -34,14 +34,14 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
+        T rsl = get(index);
         container[index] = newValue;
-        return get(index);
+        return rsl;
     }
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, size);
-        T rsl = container[index];
+        T rsl = get(index);
         modCount++;
         final int newSize = size - 1;
         if (newSize > index) {
