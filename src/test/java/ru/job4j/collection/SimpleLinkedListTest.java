@@ -1,10 +1,10 @@
 package ru.job4j.collection;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
+
+import static org.assertj.core.api.Assertions.*;
 
 class SimpleLinkedListTest {
 
@@ -88,5 +88,13 @@ class SimpleLinkedListTest {
         assertThat(second.hasNext()).isTrue();
         assertThat(second.next()).isEqualTo(2);
         assertThat(second.hasNext()).isFalse();
+    }
+
+    @Test
+    void whenNoNodes() {
+        SimpleLinkedList l = new SimpleLinkedList();
+        assertThat(l).hasSize(0);
+        l.add(null);
+        assertThat(l.get(0)).isNull();
     }
 }

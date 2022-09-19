@@ -45,19 +45,6 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
         return result.element;
     }
 
-    public E node(int index) {
-        Node<E> current = head;
-        E element = null;
-        if (index >= size - 1) {
-            return head.element;
-        }
-        for (int j = 0; j < index; j++) {
-            current = current.next;
-            element = current.element;
-        }
-        return element;
-    }
-
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
