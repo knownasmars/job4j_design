@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SimpleArrayList<T> implements SimpleList<T> {
 
-    public T[] container;
+    private T[] container;
 
     private int size;
 
