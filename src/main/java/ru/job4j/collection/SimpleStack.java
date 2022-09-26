@@ -40,10 +40,11 @@ public class SimpleStack<T> implements Iterable<T> {
         final Node<T> l = last;
         final Node<T> newNode = new Node<>(l, value, null);
         last = newNode;
-        if (l == null)
+        if (l == null) {
             first = newNode;
-        else
+        } else {
             l.next = newNode;
+        }
     }
 
     @Override
