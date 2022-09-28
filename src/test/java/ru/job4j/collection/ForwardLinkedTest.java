@@ -21,6 +21,17 @@ class ForwardLinkedTest {
     }
 
     @Test
+    void whenAddAtTheBeggining() {
+        linked.deleteFirst();
+        linked.deleteFirst();
+        linked.deleteFirst();
+        linked.deleteFirst();
+        linked.addFirst(6);
+        linked.addFirst(2);
+        assertThat(linked.deleteFirst()).isEqualTo(2);
+    }
+
+    @Test
     void whenDeleteFirst() {
         assertThat(linked.deleteFirst()).isEqualTo(1);
         assertThat(linked.deleteFirst()).isEqualTo(2);

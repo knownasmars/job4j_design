@@ -18,18 +18,11 @@ class SimpleStackTest {
     }
 
     @Test
-    void whenAddFirst() {
-        stack.addFirst(0);
-        stack.pop();
-        stack.pop();
-        assertThat(stack.pop()).isEqualTo(0);
-    }
-
-    @Test
     void whenPushThenPoll() {
         stack.push(3);
         stack.push(4);
         assertThat(stack.pop()).isEqualTo(4);
+        assertThat(stack.pop()).isEqualTo(3);
     }
 
     @Test
