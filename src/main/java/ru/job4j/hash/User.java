@@ -1,6 +1,5 @@
 package ru.job4j.hash;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class User {
