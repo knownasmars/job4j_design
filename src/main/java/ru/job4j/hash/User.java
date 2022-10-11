@@ -22,6 +22,11 @@ public class User {
         return children == user.children && Objects.equals(name, user.name) && Objects.equals(birthday, user.birthday);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children, birthday);
+    }
+
     public static void main(String[] args) {
         Map<User, Object> map = new HashMap<>(16);
         User u1 = new User("Артем", 0, new GregorianCalendar(1992, Calendar.APRIL, 12));
@@ -33,7 +38,7 @@ public class User {
         int hash2 = hashcode2 ^ (hashcode2 >>> 16);
         int bucket2 = hash2 & 15;
         map.put(u1, 12);
-        map.put(u2, 12);
+        map.put(u2, 13);
         System.out.printf("u1 - hashcode: %s, hash: %s, bucket: %s " + System.lineSeparator(),
                 hashcode1, hash1, bucket1);
         System.out.printf("u2 - hashcode: %s, hash: %s, bucket: %s" + System.lineSeparator(),
