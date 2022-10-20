@@ -48,8 +48,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
+        int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
         for (MapEntry<K, V> e : table) {
-            if (e.key == key) {
+            if (key == table[bucket].key) {
                 return e.value;
             }
         }
