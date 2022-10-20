@@ -48,20 +48,19 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
+        V rsl = null;
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
-        for (MapEntry<K, V> e : table) {
-            if (key == table[bucket].key) {
-                return e.value;
-            }
+        if (key == table[bucket].key) {
+            rsl = table[bucket].value;
         }
-        return null;
+        return rsl;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
-        if (key != null) {
+        if (key == table[bucket].key) {
             table[bucket] = null;
             rsl = true;
             count--;
@@ -78,7 +77,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
             @Override
             public boolean hasNext() {
-                return cursor < count;
+                return cursor != count;
             }
 
             @Override
