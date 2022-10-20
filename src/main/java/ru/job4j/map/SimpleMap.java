@@ -89,6 +89,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
+                while (table[cursor] == null) {
+                    cursor++;
+                }
                 return table[cursor++].key;
             }
         };
