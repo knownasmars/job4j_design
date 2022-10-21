@@ -1,9 +1,6 @@
 package ru.job4j.map;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class SimpleMap<K, V> implements Map<K, V> {
 
@@ -11,7 +8,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private int capacity = 8;
 
-    private int count = 0;
+    private int size = 0;
 
     private int modCount = 0;
 
@@ -20,14 +17,14 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean put(K key, V value) {
         boolean rsl = false;
-        float threshold = (float) (count / table.length);
+        float threshold = (float) (1.0 * size) / table.length;
         if (threshold >= LOAD_FACTOR) {
             expandArray();
         }
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
         if (table[bucket] == null) {
             table[bucket] = new MapEntry<>(key, value);
-            count++;
+            size++;
             modCount++;
             rsl = true;
         }
@@ -43,15 +40,22 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void expandArray() {
-        table = Arrays.copyOf(table, 16);
+        MapEntry<K, V>[] tmp = new MapEntry[table.length * 2];
+        for (MapEntry<K, V> entry : table) {
+            int bucket = indexFor(hash(entry.key == null ? 0 : entry.key.hashCode()));
+            tmp[bucket] = new MapEntry<>(entry.key, entry.value);
+        }
+        table = tmp;
     }
 
     @Override
     public V get(K key) {
         V rsl = null;
-        int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
-        if (key == table[bucket].key) {
-            rsl = table[bucket].value;
+        for (MapEntry<K, V> e : table) {
+            if (key != null && e != null && e.key != null && e.key.hashCode() == key.hashCode()
+                    && e.key.equals(key)) {
+                rsl = e.value;
+            }
         }
         return rsl;
     }
@@ -60,10 +64,12 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public boolean remove(K key) {
         boolean rsl = false;
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
-        if (key == table[bucket].key) {
+        MapEntry<K, V> e = table[bucket];
+        if (key != null && e != null && e.key != null && e.key.hashCode() == key.hashCode()
+                && e.key.equals(key)) {
             table[bucket] = null;
             rsl = true;
-            count--;
+            size--;
             modCount++;
         }
         return rsl;
@@ -77,19 +83,24 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
             @Override
             public boolean hasNext() {
-                return cursor != count;
+                boolean rsl = false;
+                if (modCount != lastMod) {
+                    throw new ConcurrentModificationException();
+                }
+                while (cursor <= size + 1) {
+                    if (table[cursor] != null) {
+                        rsl = true;
+                        break;
+                    }
+                    cursor++;
+                }
+                return rsl;
             }
 
             @Override
             public K next() {
-                if (modCount != lastMod) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
-                }
-                while (table[cursor] == null) {
-                    cursor++;
                 }
                 return table[cursor++].key;
             }
