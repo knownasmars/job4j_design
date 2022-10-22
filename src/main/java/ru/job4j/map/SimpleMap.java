@@ -40,22 +40,35 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void expandArray() {
-        MapEntry<K, V>[] tmp = new MapEntry[table.length * 2];
-        for (MapEntry<K, V> entry : table) {
-            int bucket = indexFor(hash(entry.key == null ? 0 : entry.key.hashCode()));
-            tmp[bucket] = new MapEntry<>(entry.key, entry.value);
+        MapEntry<K, V>[] tmp = Arrays.copyOf(table, table.length);
+        table = new MapEntry[table.length * 2];
+        int i = 0;
+        for (MapEntry<K, V> e : tmp) {
+            if (e != null) {
+                int bucket = indexFor(hash(
+                        e.key == null ? 0 : e.key.hashCode()
+                ));
+                table[bucket] = e;
+            }
         }
-        table = tmp;
     }
 
     @Override
     public V get(K key) {
         V rsl = null;
         for (MapEntry<K, V> e : table) {
-            if (key != null && e != null && e.key != null && e.key.hashCode() == key.hashCode()
-                    && e.key.equals(key)) {
+            if (key == null && e != null
+                    && e.key == null) {
                 rsl = e.value;
             }
+            if (key != null && e != null
+                    && e.key != null
+                    && e.key.hashCode() == key.hashCode()
+                    && e.key.equals(key)) {
+                rsl = e.value;
+                break;
+            }
+
         }
         return rsl;
     }
@@ -65,11 +78,19 @@ public class SimpleMap<K, V> implements Map<K, V> {
         boolean rsl = false;
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
         MapEntry<K, V> e = table[bucket];
-        if (key != null && e != null && e.key != null && e.key.hashCode() == key.hashCode()
+        if (e != null && key != null
+                && e.key != null
+                && e.key.hashCode() == key.hashCode()
                 && e.key.equals(key)) {
             table[bucket] = null;
-            rsl = true;
             size--;
+            rsl = true;
+            modCount++;
+        }
+        if (key == null){
+            table[0] = null;
+            size--;
+            rsl = true;
             modCount++;
         }
         return rsl;
