@@ -68,7 +68,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 rsl = e.value;
                 break;
             }
-
         }
         return rsl;
     }
@@ -108,7 +107,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (modCount != lastMod) {
                     throw new ConcurrentModificationException();
                 }
-                while (cursor <= size + 1) {
+                while (cursor <= table.length - 1) {
                     if (table[cursor] != null) {
                         rsl = true;
                         break;
