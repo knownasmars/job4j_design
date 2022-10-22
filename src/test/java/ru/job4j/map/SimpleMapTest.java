@@ -18,6 +18,54 @@ class SimpleMapTest {
     }
 
     @Test
+    void whenPutNullAndNull() {
+        map.put(null, "0");
+        assertThat(map.put(null, "null")).isFalse();
+    }
+
+    @Test
+    void whenPutNullAndGetIsNull() {
+        map.put(null, null);
+        assertThat(map.get(null)).isNull();
+    }
+
+    @Test
+    void whenPutThenGet() {
+        map.put(0, "0");
+        map.put(0, "1");
+        assertThat(map.get(0)).isEqualTo("0");
+    }
+
+    @Test
+    void whenNoElementsGetNull() {
+        map.remove(1);
+        map.remove(2);
+        map.remove(3);
+        map.remove(4);
+        assertThat(map.get(1)).isNull();
+        assertThat(map.get(2)).isNull();
+        assertThat(map.get(3)).isNull();
+        assertThat(map.get(4)).isNull();
+    }
+
+    @Test
+    void whenRemoveNoElements() {
+        map.remove(1);
+        map.remove(2);
+        map.remove(3);
+        map.remove(4);
+        assertThat(map.remove(1)).isFalse();
+        assertThat(map.remove(2)).isFalse();
+        assertThat(map.remove(3)).isFalse();
+        assertThat(map.remove(4)).isFalse();
+    }
+
+    @Test
+    void whenRemoveAbsentElement() {
+        assertThat(map.remove(5)).isFalse();
+    }
+
+    @Test
     void checkSimpleIterator() {
         assertThat(map).hasSize(4).contains(1, 2, 3, 4);
     }

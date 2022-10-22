@@ -8,9 +8,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private int capacity = 8;
 
-    private int size = 0;
-
     private int modCount = 0;
+
+    private int size = 0;
 
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
