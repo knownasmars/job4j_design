@@ -86,7 +86,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
             rsl = true;
             modCount++;
         }
-        if (key == null){
+        if (key == null) {
             table[0] = null;
             size--;
             rsl = true;
