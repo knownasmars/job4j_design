@@ -17,10 +17,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean put(K key, V value) {
         boolean rsl = false;
-        if (1.0 * size / table.length >= LOAD_FACTOR) {
+        if (size >= capacity * LOAD_FACTOR) {
             expandArray();
         }
-        int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
+        int bucket = indexFor(hash(Objects.hashCode(key)));
         if (table[bucket] == null) {
             table[bucket] = new MapEntry<>(key, value);
             size++;
@@ -53,14 +53,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public V get(K key) {
         V rsl = null;
-        int bucket = key == null ? 0 : indexFor(hash(
-                Objects.hashCode(key)
-        ));
-        MapEntry<K, V> e = table[bucket];
-        if (e != null
-                && Objects.hashCode(e.key) == Objects.hashCode(key)
-                && e.key == key) {
-            rsl = e.value;
+        int bucket = indexFor(hash(Objects.hashCode(key)));
+        if (isEquals(key)) {
+            rsl = table[bucket].value;
         }
         return rsl;
     }
@@ -68,13 +63,8 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        int bucket = indexFor(hash(
-                key == null ? 0 : Objects.hashCode(key)
-        ));
-        MapEntry<K, V> e = table[bucket];
-        if (e != null
-                && Objects.hashCode(e.key) == Objects.hashCode(key)
-                && e.key == key) {
+        int bucket = indexFor(hash(Objects.hashCode(key)));
+        if (isEquals(key)) {
             table[bucket] = null;
             size--;
             modCount++;
@@ -82,6 +72,19 @@ public class SimpleMap<K, V> implements Map<K, V> {
         }
         return rsl;
     }
+
+    private boolean isEquals(K key) {
+        boolean rsl = false;
+        int bucket = indexFor(hash(Objects.hashCode(key)));
+        MapEntry<K, V> e = table[bucket];
+        if (e != null
+                && Objects.hashCode(e.key) == Objects.hashCode(key)
+                && (Objects.equals(e.key, key))) {
+            rsl = true;
+        }
+        return rsl;
+    }
+
 
     @Override
     public Iterator<K> iterator() {
@@ -91,7 +94,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
             @Override
             public boolean hasNext() {
-                boolean rsl = false;
                 if (modCount != lastMod) {
                     throw new ConcurrentModificationException();
                 }
