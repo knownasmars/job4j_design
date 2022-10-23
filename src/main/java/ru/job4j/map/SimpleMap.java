@@ -17,8 +17,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean put(K key, V value) {
         boolean rsl = false;
-        float threshold = (float) (1.0 * size) / table.length;
-        if (threshold >= LOAD_FACTOR) {
+        if (1.0 * size / table.length >= LOAD_FACTOR) {
             expandArray();
         }
         int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
@@ -32,42 +31,36 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int hash(int hashCode) {
-        return hashCode ^ (hashCode >>> table.length);
+        return hashCode ^ (hashCode >>> 16);
     }
 
     private int indexFor(int hash) {
-        return (table.length - 1) & hash;
+        return (capacity - 1) & hash;
     }
 
     private void expandArray() {
-        MapEntry<K, V>[] tmp = Arrays.copyOf(table, table.length);
-        table = new MapEntry[table.length * 2];
-        int i = 0;
-        for (MapEntry<K, V> e : tmp) {
+        capacity *= 2;
+        MapEntry<K, V>[] tmp = new MapEntry[capacity];
+        for (MapEntry<K, V> e : table) {
             if (e != null) {
-                int bucket = indexFor(hash(
-                        e.key == null ? 0 : e.key.hashCode()
-                ));
-                table[bucket] = e;
+                int bucket = indexFor(hash(Objects.hashCode(e.key)));
+                tmp[bucket] = e;
             }
         }
+        table = tmp;
     }
 
     @Override
     public V get(K key) {
         V rsl = null;
-        for (MapEntry<K, V> e : table) {
-            if (key == null && e != null
-                    && e.key == null) {
-                rsl = e.value;
-            }
-            if (key != null && e != null
-                    && e.key != null
-                    && e.key.hashCode() == key.hashCode()
-                    && e.key.equals(key)) {
-                rsl = e.value;
-                break;
-            }
+        int bucket = key == null ? 0 : indexFor(hash(
+                Objects.hashCode(key)
+        ));
+        MapEntry<K, V> e = table[bucket];
+        if (e != null
+                && Objects.hashCode(e.key) == Objects.hashCode(key)
+                && e.key == key) {
+            rsl = e.value;
         }
         return rsl;
     }
@@ -75,22 +68,17 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        int bucket = indexFor(hash(key == null ? 0 : key.hashCode()));
+        int bucket = indexFor(hash(
+                key == null ? 0 : Objects.hashCode(key)
+        ));
         MapEntry<K, V> e = table[bucket];
-        if (e != null && key != null
-                && e.key != null
-                && e.key.hashCode() == key.hashCode()
-                && e.key.equals(key)) {
+        if (e != null
+                && Objects.hashCode(e.key) == Objects.hashCode(key)
+                && e.key == key) {
             table[bucket] = null;
             size--;
-            rsl = true;
             modCount++;
-        }
-        if (key == null) {
-            table[0] = null;
-            size--;
             rsl = true;
-            modCount++;
         }
         return rsl;
     }
@@ -107,14 +95,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (modCount != lastMod) {
                     throw new ConcurrentModificationException();
                 }
-                while (cursor <= table.length - 1) {
-                    if (table[cursor] != null) {
-                        rsl = true;
-                        break;
-                    }
+                while (cursor < table.length
+                        && table[cursor] == null) {
                     cursor++;
                 }
-                return rsl;
+                return cursor < table.length;
             }
 
             @Override
