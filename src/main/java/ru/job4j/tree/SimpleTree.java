@@ -9,16 +9,32 @@ public class SimpleTree<E> implements Tree<E> {
         this.root = new Node<>(root);
     }
 
+    public boolean isBinary() {
+        boolean rsl = false;
+        Queue<Node<E>> data = new LinkedList<>();
+        data.offer(this.root);
+        while (!data.isEmpty()) {
+            Node<E> el = data.poll();
+            if (data.size() < 2) {
+                rsl = true;
+                break;
+            }
+            data.addAll(el.children);
+        }
+        return rsl;
+    }
+
     @Override
     public boolean add(E parent, E child) {
+        boolean rsl = false;
         Optional<Node<E>> parentNode = findBy(parent);
         Optional<Node<E>> childNode = findBy(child);
         Node<E> kid = new Node<>(child);
-        if (childNode.isPresent() || parentNode.isEmpty()) {
-            return false;
+        if (parentNode.isPresent() && childNode.isEmpty()) {
+            parentNode.get().children.add(kid);
+            rsl = true;
         }
-        parentNode.get().children.add(kid);
-        return true;
+        return rsl;
     }
 
     @Override
