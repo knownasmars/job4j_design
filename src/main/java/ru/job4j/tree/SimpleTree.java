@@ -10,13 +10,13 @@ public class SimpleTree<E> implements Tree<E> {
         this.root = new Node<>(root);
     }
 
+    public boolean isBinary() {
+        return findByPredicate(x -> x.children.size() > 2).isEmpty();
+    }
+
     @Override
     public Optional<Node<E>> findBy(E value) {
         return findByPredicate(x -> x.value.equals(value));
-    }
-
-    public boolean isBinary() {
-        return findByPredicate(x -> x.children.size() > 2).isEmpty();
     }
 
     private Optional<Node<E>> findByPredicate(Predicate<Node<E>> condition) {
