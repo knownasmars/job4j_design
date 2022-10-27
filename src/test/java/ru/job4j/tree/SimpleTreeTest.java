@@ -30,8 +30,11 @@ public class SimpleTreeTest {
     void whenIsBinary() {
         SimpleTree<Integer> tree = new SimpleTree<>(1);
         tree.add(1, 2);
+        tree.add(1, 7);
         tree.add(3, 4);
+        tree.add(3, 12);
         tree.add(5, 6);
+        tree.add(5, 123);
         assertThat(tree.isBinary()).isTrue();
     }
 
