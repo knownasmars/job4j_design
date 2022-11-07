@@ -16,7 +16,8 @@ public class Analize {
             if (!map.containsKey(u.getId())) {
                 info.setAdded(info.getAdded() + 1);
             }
-            if (!Objects.equals(map.get(u.getId()), u.getName())) {
+            if (map.containsKey(u.getId())
+                    && !Objects.equals(map.get(u.getId()), u.getName())) {
                 info.setChanged(info.getChanged() + 1);
             }
             if (previous.contains(u) && !current.contains(u)) {
