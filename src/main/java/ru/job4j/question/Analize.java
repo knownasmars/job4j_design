@@ -18,8 +18,8 @@ public class Analize {
                 info.setChanged(info.getChanged() + 1);
             }
         }
-        int tmpSize = current.size() - previous.size() + info.getDeleted();
-        info.setAdded(info.getAdded() + tmpSize);
+        int tmp = current.size() - previous.size() + info.getDeleted();
+        info.setAdded(info.getAdded() + tmp);
         return info;
     }
 }
