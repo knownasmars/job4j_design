@@ -7,6 +7,19 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class AnalizeTest {
 
     @Test
+    void whenAllAded() {
+        User u1 = new User(1, "A");
+        User u2 = new User(2, "B");
+        User u3 = new User(3, "C");
+        User u4 = new User(4, "D");
+        User u5 = new User(5, "E");
+        User u6 = new User(6, "F");
+        Set previous = Set.of(u1, u2, u3);
+        Set current = Set.of(u4, u5, u6);
+        assertThat(Analize.diff(previous, current)).isEqualTo(new Info(3, 0, 3));
+    }
+
+    @Test
     void whenNotChanged() {
         User u1 = new User(1, "A");
         User u2 = new User(2, "B");
