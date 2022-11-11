@@ -25,6 +25,8 @@ public class LogFilter {
     public static void main(String[] args) {
         LogFilter logFilter = new LogFilter();
         List<String> log = logFilter.filter("log.txt");
-        System.out.println(log);
+        for (String s : log) {
+            System.out.println(s);
+        }
     }
 }
