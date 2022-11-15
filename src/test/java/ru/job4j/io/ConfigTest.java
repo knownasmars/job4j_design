@@ -30,11 +30,12 @@ class ConfigTest {
     }
 
     @Test
-    void whenNoSignThenNotAdded() {
+    void whenNoSignThenGetErrorMessage() {
         String path = "./data/without_equals_sign.properties";
         Config config = new Config(path);
         assertThatThrownBy(config::load)
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Given data is not correct. Check out the containing of \"=\" in the file.");
     }
 
     @Test

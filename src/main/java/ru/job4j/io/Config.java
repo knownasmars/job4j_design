@@ -24,9 +24,12 @@ public class Config {
                     continue;
                 }
                 if (!s.contains("=")
-                        || (s.startsWith("=") || s.endsWith("="))
-                        || (s.startsWith("=") && s.endsWith("="))) {
-                    throw new IllegalArgumentException();
+                        || s.startsWith("=")
+                        || s.indexOf("=") == s.length() - 1) {
+                    throw new IllegalArgumentException(
+                            "Given data is not correct. "
+                                    + "Check out the containing of \"=\" in the file."
+                    );
                 }
                 String[] spl = s.split("=", 2);
                 values.put(spl[0], spl[1]);
