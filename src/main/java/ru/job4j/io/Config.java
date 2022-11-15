@@ -19,22 +19,17 @@ public class Config {
                 new FileReader(this.path))) {
             String s;
             while ((s = text.readLine()) != null) {
-                if (s.startsWith("=") || s.endsWith("=")
-                        || (s.startsWith("=") && s.endsWith("="))
-                        || (!s.startsWith("#") && !s.contains("=") && !s.equals(""))) {
+                s = s.trim();
+                if (s.startsWith("#") || s.equals("")) {
+                    continue;
+                }
+                if (!s.contains("=")
+                        || (s.startsWith("=") || s.endsWith("="))
+                        || (s.startsWith("=") && s.endsWith("="))) {
                     throw new IllegalArgumentException();
                 }
-                if (!s.startsWith("#") && s.trim().length() != 0
-                        && s.contains("=")) {
-                    String[] spl = s.split("=");
-                    StringBuilder rsl = new StringBuilder(spl[1]);
-                    if (spl.length > 2) {
-                        for (int i = 2; i < spl.length; i++) {
-                            rsl.append("=").append(spl[i]);
-                        }
-                    }
-                    values.put(spl[0], rsl.toString());
-                }
+                String[] spl = s.split("=", 2);
+                values.put(spl[0], spl[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();
