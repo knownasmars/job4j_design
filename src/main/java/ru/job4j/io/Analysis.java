@@ -8,16 +8,17 @@ public class Analysis {
                 new FileReader(source));
                 PrintWriter out = new PrintWriter(
                 new FileOutputStream(target))) {
-            String s, start, end;
+            String s;
             while ((s = bf.readLine()) != null) {
                 if (s.startsWith("400") || s.startsWith("500")) {
-                    start = s.substring(4) + ";";
-                    out.print(start);
+                    out.append(s, 4, s.length())
+                            .append(";");
                     while (s.startsWith("400") || s.startsWith("500")) {
                         s = bf.readLine();
                     }
-                    end = s.substring(4) + ";";
-                    out.println(end);
+                    out.append(s, 4, s.length())
+                            .append(";")
+                            .append(System.lineSeparator());
                 }
             }
         } catch (IOException e) {
@@ -26,12 +27,10 @@ public class Analysis {
     }
 
     public static void main(String[] args) {
-        try (PrintWriter out = new PrintWriter(
-                new FileOutputStream("unavailable.csv"))) {
-            out.println("15:01:30;15:02:32");
-            out.println("15:10:30;23:12:32");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Analysis analysis = new Analysis();
+        analysis.unavailable(
+                "source_file.csv", "target_file_3.csv");
+        analysis.unavailable(
+                "source_file_2.csv", "target_file_4.csv");
     }
 }
