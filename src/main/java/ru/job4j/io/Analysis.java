@@ -8,26 +8,17 @@ public class Analysis {
                 new FileReader(source));
                 PrintWriter out = new PrintWriter(
                 new FileOutputStream(target))) {
-            String s; String start; String end;
+            String s, start, end;
             while ((s = bf.readLine()) != null) {
                 if (s.startsWith("400") || s.startsWith("500")) {
-                    out.print(s.substring(4) + ";");
-                    s = bf.readLine();
-                    start = "";
+                    start = s.substring(4) + ";";
+                    out.print(start);
+                    while (s.startsWith("400") || s.startsWith("500")) {
+                        s = bf.readLine();
+                    }
+                    end = s.substring(4) + ";";
+                    out.println(end);
                 }
-                if (s.startsWith("400") || s.startsWith("500")) {
-                    String tmp = bf.readLine();
-                    out.println(tmp.substring(4, s.length()) + ";");
-                    end = "";
-                    continue;
-                }
-                if (end) {
-
-                }
-//                if (bf.readLine() == null) {
-//                    out.println(s.substring(4) + ";");
-//                }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
