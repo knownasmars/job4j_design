@@ -13,9 +13,8 @@ public class Dir {
         }
         System.out.println(String.format("size : %s", file.getTotalSpace()));
         for (File subfile : file.listFiles()) {
-            System.out.printf("File name : %s" + "File length : %s",
-                    subfile.getAbsoluteFile().getName()
-                            + System.lineSeparator(),
+            System.out.printf("File name : %s ; File length : %s",
+                    subfile.getAbsoluteFile().getName(),
                     subfile.length()
                             + System.lineSeparator()
             );
