@@ -8,11 +8,22 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    Map<FileProperty, List<Path>> duplicates = new HashMap<>();
-    Map<FileProperty, List<Path>> map = new HashMap<>();
 
-    public Map<FileProperty, List<Path>> getInfo() {
-        return duplicates;
+    private Map<FileProperty, List<Path>> map = new HashMap<>();
+
+    public void findDuplicate() {
+        for (Map.Entry<FileProperty, List<Path>> entry : map.entrySet()) {
+            if (entry.getValue().size() < 2) {
+                map.remove(entry.getKey());
+            }
+        }
+    }
+
+    public void printDuplicates() {
+        map.forEach((key, value) -> {
+            System.out.println(key);
+            value.forEach(System.out::println);
+        });
     }
 
     @Override
@@ -24,15 +35,8 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
         if (map.containsKey(fp)) {
             map.get(fp).add(file.toAbsolutePath());
         } else {
-            map.put(
-                    fp,
-                    new ArrayList<>());
+            map.put(fp, new ArrayList<>());
             map.get(fp).add(file.toAbsolutePath());
-        }
-        for (Map.Entry<FileProperty, List<Path>> entry : map.entrySet()) {
-            if (entry.getValue().size() > 1) {
-                duplicates.put(entry.getKey(), entry.getValue());
-            }
         }
         return FileVisitResult.CONTINUE;
     }

@@ -9,9 +9,7 @@ public class DuplicatesFinder {
         DuplicatesVisitor dv = new DuplicatesVisitor();
         Files.walkFileTree(Paths.get(
                 "C:\\projects\\job4j_design\\task_data"), dv);
-        dv.getInfo().forEach((key, value) -> {
-            System.out.println(key);
-            value.forEach(System.out::println);
-        });
+        dv.findDuplicate();
+        dv.printDuplicates();
     }
 }
