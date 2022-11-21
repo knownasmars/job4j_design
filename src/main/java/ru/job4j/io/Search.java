@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,13 +10,18 @@ import java.util.function.Predicate;
 
 public class Search {
     public static void validate(String[] args) {
+        File file = new File(args[0]);
         if (args[0].length() == 0) {
             throw new IllegalArgumentException(
                     "First argument cannot be empty");
         }
-        if (!args[0].contains("\\")) {
+        if (!Files.exists(file.toPath())) {
             throw new IllegalArgumentException(
-                    "Incorrect catalog address.");
+                    String.format("Not exist %s", file.toPath()));
+        }
+        if (!Files.isDirectory(file.toPath())) {
+            throw new IllegalArgumentException(
+                    String.format("Not directory %s", file.toPath()));
         }
         if (args[1].length() <= 1) {
             throw new IllegalArgumentException(
