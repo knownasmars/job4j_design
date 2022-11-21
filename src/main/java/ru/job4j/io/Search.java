@@ -9,8 +9,21 @@ import java.util.function.Predicate;
 
 public class Search {
     public static void validate(String[] args) {
-        if (args.length != 2 || args[0] == null || args[1] == null) {
-            throw new IllegalArgumentException("Input arguments are not correct. Try again.");
+        if (args[0].length() == 0) {
+            throw new IllegalArgumentException(
+                    "First argument cannot be empty");
+        }
+        if (!args[0].contains("\\")) {
+            throw new IllegalArgumentException(
+                    "Incorrect catalog address.");
+        }
+        if (args[1].length() <= 1) {
+            throw new IllegalArgumentException(
+                    "Second argument length has to be more than 1");
+        }
+        if (!args[1].startsWith(".")) {
+            throw new IllegalArgumentException(
+                    "Second argument has to be started with \".\"");
         }
     }
 
