@@ -8,6 +8,9 @@ public class ArgsName {
     private final Map<String, String> values = new HashMap<>();
 
     public String get(String key) {
+        if (values.get(key) == null || values.get(key).equals("")) {
+            throw new IllegalArgumentException();
+        }
         if (!values.containsKey(key)) {
             throw new IllegalArgumentException();
         }

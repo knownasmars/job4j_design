@@ -4,6 +4,27 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 class ArgsNameTest {
+//    @Test
+//    void whenNoKey() {
+//        ArgsName jvm = ArgsName.of(new String[] {"-=512", "-encoding=UTF-8"});
+//        assertThatThrownBy(() -> jvm.get("-"))
+//                .isInstanceOf(IllegalArgumentException.class);
+//    }
+
+    @Test
+    void whenNoKey() {
+        ArgsName jvm = ArgsName.of(new String[] {"-=512", "-encoding=UTF-8"});
+        assertThatThrownBy(() -> jvm.get("-"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void whenNoValue() {
+        ArgsName jvm = ArgsName.of(new String[] {"-Xms="});
+        assertThatThrownBy(() -> jvm.get("Xms"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     @Test
     void whenGetFirst() {
         ArgsName jvm = ArgsName.of(new String[] {"-Xmx=512", "-encoding=UTF-8"});
@@ -25,7 +46,8 @@ class ArgsNameTest {
     @Test
     void whenGetNotExist() {
         ArgsName jvm = ArgsName.of(new String[] {"-Xmx=512"});
-        assertThatThrownBy(() -> jvm.get("Xms")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> jvm.get("Xms"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
