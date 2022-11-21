@@ -8,9 +8,16 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Search {
+    public static void validate(String[] args) {
+        if (args.length != 2 || args[0] == null || args[1] == null) {
+            throw new IllegalArgumentException("Input arguments are not correct. Try again.");
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        Path start = Paths.get(".");
-        search(start, p -> p.toFile().getName().startsWith("pair"))
+        validate(args);
+        Path start = Paths.get(args[0]);
+        search(start, p -> p.toFile().getName().startsWith(args[1]))
                 .stream().map(x -> x.toFile().getName())
                 .forEach(System.out::println);
     }
