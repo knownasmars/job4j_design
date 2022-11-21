@@ -9,16 +9,28 @@ public class ArgsName {
 
     public String get(String key) {
         if (values.get(key) == null || values.get(key).equals("")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                    "Input argument is null or empty"
+            );
         }
         if (!values.containsKey(key)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                    "No such argument"
+            );
         }
         return values.get(key);
     }
 
     private void parse(String[] args) {
         for (String arg : args) {
+            if (!arg.contains("=")) {
+                throw new IllegalArgumentException(
+                        "The string has no \"=\"");
+            }
+            if (!arg.contains("-")) {
+                throw new IllegalArgumentException(
+                        "The string has no dash sign \"-\"");
+            }
             String[] tmp = arg.substring(1).split("=", 2);
             values.put(tmp[0], tmp[1]);
         }

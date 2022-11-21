@@ -4,12 +4,18 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 class ArgsNameTest {
-//    @Test
-//    void whenNoKey() {
-//        ArgsName jvm = ArgsName.of(new String[] {"-=512", "-encoding=UTF-8"});
-//        assertThatThrownBy(() -> jvm.get("-"))
-//                .isInstanceOf(IllegalArgumentException.class);
-//    }
+
+    @Test
+    void whenNoEnDashSign() {
+        assertThatThrownBy(() -> ArgsName.of(new String[] {"Xms=512"}))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void whenNoEqualsSign() {
+        assertThatThrownBy(() -> ArgsName.of(new String[] {"512"}))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void whenNoKey() {
