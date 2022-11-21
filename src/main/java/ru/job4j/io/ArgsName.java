@@ -38,7 +38,7 @@ public class ArgsName {
 
     public static ArgsName of(String[] args) {
         if (args.length == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The array of argument is empty");
         }
         ArgsName names = new ArgsName();
         names.parse(args);
