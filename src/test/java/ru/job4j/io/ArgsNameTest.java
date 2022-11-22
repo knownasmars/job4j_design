@@ -19,15 +19,13 @@ class ArgsNameTest {
 
     @Test
     void whenNoKey() {
-        ArgsName jvm = ArgsName.of(new String[] {"-=512", "-encoding=UTF-8"});
-        assertThatThrownBy(() -> jvm.get("-"))
+        assertThatThrownBy(() -> ArgsName.of(new String[] {"-=512", "-encoding=UTF-8"}))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void whenNoValue() {
-        ArgsName jvm = ArgsName.of(new String[] {"-Xms="});
-        assertThatThrownBy(() -> jvm.get("Xms"))
+        assertThatThrownBy(() -> ArgsName.of(new String[] {"-Xms="}))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -48,7 +46,6 @@ class ArgsNameTest {
         ArgsName jvm = ArgsName.of(new String[] {"-request=?msg=Exit="});
         assertThat(jvm.get("request")).isEqualTo("?msg=Exit=");
     }
-
     @Test
     void whenGetNotExist() {
         ArgsName jvm = ArgsName.of(new String[] {"-Xmx=512"});
