@@ -30,12 +30,12 @@ public class ArgsName {
                         "The string has no \"=\"");
             }
             String[] tmp = arg.substring(1).split("=", 2);
-            if (tmp[0].equals("")) {
+            if (tmp[0].isBlank()) {
                 throw new IllegalArgumentException(
                         "The key argument is null or empty"
                 );
             }
-            if (tmp[1] == null || tmp[1].equals("")) {
+            if (tmp[1].isBlank()) {
                 throw new IllegalArgumentException(
                         "The value argument is null or empty"
                 );
