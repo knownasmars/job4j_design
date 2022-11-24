@@ -4,9 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -68,11 +66,6 @@ public class Zip {
         if (args.length != 3) {
             throw new IllegalArgumentException(
                     "Number of array elements is not correct"
-            );
-        }
-        if (!args[0].startsWith("-")) {
-            throw new IllegalArgumentException(
-                    "Arguments have to be started with dash \"-\" sign"
             );
         }
         Zip zip = new Zip();
