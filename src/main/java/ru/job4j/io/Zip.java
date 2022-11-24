@@ -13,8 +13,6 @@ import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
-    private final Map<String, String> argsMap = new HashMap<>();
-
     public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(
                 new BufferedOutputStream(
