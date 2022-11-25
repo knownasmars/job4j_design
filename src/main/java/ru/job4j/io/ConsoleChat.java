@@ -1,7 +1,5 @@
 package ru.job4j.io;
 
-import com.sun.source.tree.ContinueTree;
-
 import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -29,28 +27,31 @@ public class ConsoleChat {
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(System.in))) {
             List<String> log = new ArrayList<>();
-            List<String> answers = readPhrases();
             String input = br.readLine();
             while (!Objects.equals(input, OUT)) {
+                String tmp = getRandom(readPhrases());
                 log.add(input);
+                log.add(tmp);
                 System.out.println(input);
-//                if (!Objects.equals(input, STOP)) {
-//                    String tmp = getRandom(answers);
-//                    log.add(tmp);
-//                    System.out.println(tmp);
-//                }
-//                while (input.equals(STOP) && !input.equals(CONTINUE)) {
-//                    input = br.readLine();
-//                    log.add(input);
-//                    System.out.println(input);
-//                }
-//                if (Objects.equals(input, CONTINUE)) {
-//                    log.add(input);
-//                    System.out.println(input);
-//                }
+                System.out.println(tmp);
                 saveLog(log);
                 input = br.readLine();
+                if (Objects.equals(input, STOP)) {
+                    log.add(input);
+                    System.out.println(input);
+                    input = br.readLine();
+                    saveLog(log);
+                    while (!Objects.equals(input, CONTINUE)) {
+                        log.add(input);
+                        System.out.println(input);
+                        input = br.readLine();
+                        saveLog(log);
+                    }
+                }
             }
+            log.add(input);
+            System.out.println(input);
+            saveLog(log);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,7 +91,5 @@ public class ConsoleChat {
         ConsoleChat cc = new ConsoleChat(
                 "dialog.txt", "answers.txt");
         cc.run();
-        List<String> chat = cc.readPhrases();
-        cc.saveLog(chat);
     }
 }
