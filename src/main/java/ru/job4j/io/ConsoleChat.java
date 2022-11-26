@@ -28,8 +28,9 @@ public class ConsoleChat {
                 new InputStreamReader(System.in))) {
             List<String> log = new ArrayList<>();
             String input = br.readLine();
+            List<String> phrases = readPhrases();
             while (!Objects.equals(input, OUT)) {
-                String tmp = getRandom(readPhrases());
+                String tmp = getRandom(phrases);
                 log.add(input);
                 log.add(tmp);
                 System.out.println(input);
