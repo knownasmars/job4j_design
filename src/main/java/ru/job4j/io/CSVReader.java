@@ -2,35 +2,36 @@ package ru.job4j.io;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class CSVReader {
-    public static void handle(ArgsName argsName) throws Exception {
+    public static void handle(ArgsName argsName) throws IOException {
         File file = new File(argsName.get("out"));
         try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(file.getName()))) {
-            Scanner scanner = new Scanner(
-                    new FileInputStream(argsName.get("path")));
-            String line;
-            String[] tmp;
-            int[] indexes = getIndexArray(argsName);
-            while (scanner.hasNext()) {
-                line = scanner.nextLine();
-                tmp = line.split(";");
-                StringBuilder sb = new StringBuilder();
-                for (int index : indexes) {
-                    sb.append(";").append(tmp[index]);
-                }
-                if (argsName.get("out").equals("stdout")) {
-                    System.out.println(sb.substring(1, sb.length()));
-                }
-                else {
-                    bw.write(sb.substring(1, sb.length())
-                            + System.lineSeparator());
+                new OutputStreamWriter(
+                        Files.newOutputStream(
+                                Path.of(file.getAbsolutePath()))))) {
+            try (Scanner scanner = new Scanner(
+                    new FileInputStream(argsName.get("path")))) {
+                String line;
+                String[] tmp;
+                int[] indexes = getIndexArray(argsName);
+                while (scanner.hasNext()) {
+                    line = scanner.nextLine();
+                    tmp = line.split(";");
+                    StringBuilder sb = new StringBuilder();
+                    for (int index : indexes) {
+                        sb.append(";").append(tmp[index]);
+                    }
+                    if ("stdout".equals(argsName.get("out"))) {
+                        System.out.println(sb.substring(1, sb.length()));
+                    } else {
+                        bw.write(sb.substring(1, sb.length())
+                                + System.lineSeparator());
+                    }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -39,7 +40,7 @@ public class CSVReader {
         handle(ArgsName.of(args));
     }
 
-    private static int[] getIndexArray(ArgsName argsName) throws Exception {
+    private static int[] getIndexArray(ArgsName argsName) throws IOException {
         Scanner scanner = new Scanner(
                 new FileInputStream(argsName.get("path")));
         String[] array = scanner.nextLine().split(";");
@@ -57,9 +58,10 @@ public class CSVReader {
     }
 
     public static void validate(String[] args, ArgsName argsName) {
-        if (args.length == 0) {
+        if (args.length != 4) {
             throw new IllegalArgumentException(
-                    "The set of arguments cannot be empty");
+                    "Length of the arguments set has to be equal 4"
+            );
         }
         File file = new File(argsName.get("path"));
         if (!file.isFile()) {
@@ -68,11 +70,11 @@ public class CSVReader {
             );
         }
         File outFile = new File(argsName.get("out"));
-        if (!(outFile.getName().equals("stdout") || Files.isDirectory(outFile.toPath()))) {
+        if (!("stdout".equals(outFile.getName())
+                || outFile.getName().endsWith(".csv"))) {
             throw new IllegalArgumentException(
                     "Third argument has to be equal \"stdout\" "
-                            + "or contain the path where "
-                            + "to write out the file"
+                            + "or ended with \".csv\""
             );
         }
     }
