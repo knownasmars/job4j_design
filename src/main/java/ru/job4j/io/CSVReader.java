@@ -7,29 +7,40 @@ import java.util.*;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
-        File file = new File(argsName.get("out"));
-        try (BufferedWriter bw = new BufferedWriter(
-                new OutputStreamWriter(
-                        Files.newOutputStream(
-                                Path.of(file.getAbsolutePath()))))) {
-            try (Scanner scanner = new Scanner(
-                    new FileInputStream(argsName.get("path")))) {
-                String line;
-                String[] tmp;
-                int[] indexes = getIndexArray(argsName);
-                while (scanner.hasNext()) {
-                    line = scanner.nextLine();
-                    tmp = line.split(";");
-                    StringBuilder sb = new StringBuilder();
-                    for (int index : indexes) {
-                        sb.append(";").append(tmp[index]);
-                    }
-                    if ("stdout".equals(argsName.get("out"))) {
-                        System.out.println(sb.substring(1, sb.length()));
-                    } else {
+        try (Scanner scanner = new Scanner(
+                new FileInputStream(argsName.get("path")))) {
+            String line;
+            String[] tmp;
+            int[] indexes = getIndexArray(argsName);
+            while (scanner.hasNext()) {
+                StringBuilder sb = new StringBuilder();
+                line = scanner.nextLine();
+                tmp = line.split(";");
+                for (int index : indexes) {
+                    sb.append(";").append(tmp[index]);
+                }
+                if ("stdout".equals(argsName.get("out"))) {
+                    System.out.println(sb.substring(1, sb.length()));
+                } else {
+                    File file = new File(argsName.get("out"));
+                    try (BufferedWriter bw = new BufferedWriter(
+                            new OutputStreamWriter(
+                                    Files.newOutputStream(
+                                            Path.of(file.getAbsolutePath()))))) {
                         bw.write(sb.substring(1, sb.length())
                                 + System.lineSeparator());
+                        while (scanner.hasNext()) {
+                            sb = new StringBuilder();
+                            line = scanner.nextLine();
+                            tmp = line.split(";");
+                            for (int index : indexes) {
+                                sb.append(";").append(tmp[index]);
+                            }
+                            bw.write(sb.substring(1, sb.length())
+                                    + System.lineSeparator());
+                        }
                     }
+                    break;
                 }
             }
         }
@@ -41,20 +52,21 @@ public class CSVReader {
     }
 
     private static int[] getIndexArray(ArgsName argsName) throws IOException {
-        Scanner scanner = new Scanner(
-                new FileInputStream(argsName.get("path")));
-        String[] array = scanner.nextLine().split(";");
-        String[] filters = argsName.get("filter").split(",");
-        int[] indexes = new int[filters.length];
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < filters.length; j++) {
-                if (array[i].equals(filters[j])) {
-                    indexes[j] = Arrays.asList(array).indexOf(filters[j]);
-                    break;
+        try (Scanner scanner = new Scanner(
+                new FileInputStream(argsName.get("path")))) {
+            String[] array = scanner.nextLine().split(";");
+            String[] filters = argsName.get("filter").split(",");
+            int[] indexes = new int[filters.length];
+            for (int i = 0; i < array.length; i++) {
+                for (int j = 0; j < filters.length; j++) {
+                    if (array[i].equals(filters[j])) {
+                        indexes[j] = Arrays.asList(array).indexOf(filters[j]);
+                        break;
+                    }
                 }
             }
+            return indexes;
         }
-        return indexes;
     }
 
     public static void validate(String[] args, ArgsName argsName) {
