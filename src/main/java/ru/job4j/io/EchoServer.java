@@ -17,11 +17,9 @@ public class EchoServer {
                     if (line.contains("/?msg=Exit")) {
                         out.write("Server is stopped!".getBytes());
                         server.close();
-                    }
-                    else if (line.contains("/?msg=Hello")) {
+                    } else if (line.contains("/?msg=Hello")) {
                         out.write("Hello, dear friend!".getBytes());
-                    }
-                    else {
+                    } else {
                         out.write("What".getBytes());
                     }
                     out.flush();
