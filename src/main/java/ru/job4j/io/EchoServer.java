@@ -15,7 +15,7 @@ public class EchoServer {
                     out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                     String line = in.readLine();
                     if (line.contains("/?msg=Exit")) {
-                        out.write("Server is stopped!".getBytes());
+                        out.write("Server is stopped!!!".getBytes());
                         server.close();
                     } else if (line.contains("/?msg=Hello")) {
                         out.write("Hello, dear friend!".getBytes());
