@@ -1,47 +1,27 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
+        String target = argsName.get("out");
         try (Scanner scanner = new Scanner(
-                new FileInputStream(argsName.get("path")))) {
-            String line;
-            String[] tmp;
+                new File(argsName.get("path")));
+             PrintStream out =
+                     "stdout".equals(target)
+                             ? System.out : new PrintStream(target)) {
+            String[] tmp; String line;
             int[] indexes = getIndexArray(argsName);
+            StringBuilder sb = new StringBuilder();
             while (scanner.hasNext()) {
-                StringBuilder sb = new StringBuilder();
                 line = scanner.nextLine();
-                tmp = line.split(";");
+                tmp = line.split(argsName.get("delimiter"));
                 for (int index : indexes) {
-                    sb.append(";").append(tmp[index]);
+                    sb.append(tmp[index]).append(argsName.get("delimiter"));
                 }
-                if ("stdout".equals(argsName.get("out"))) {
-                    System.out.println(sb.substring(1, sb.length()));
-                } else {
-                    File file = new File(argsName.get("out"));
-                    try (BufferedWriter bw = new BufferedWriter(
-                            new OutputStreamWriter(
-                                    Files.newOutputStream(
-                                            Path.of(file.getAbsolutePath()))))) {
-                        bw.write(sb.substring(1, sb.length())
-                                + System.lineSeparator());
-                        while (scanner.hasNext()) {
-                            sb = new StringBuilder();
-                            line = scanner.nextLine();
-                            tmp = line.split(";");
-                            for (int index : indexes) {
-                                sb.append(";").append(tmp[index]);
-                            }
-                            bw.write(sb.substring(1, sb.length())
-                                    + System.lineSeparator());
-                        }
-                    }
-                    break;
-                }
+                out.println(sb);
+                sb.delete(0, sb.length());
             }
         }
     }
@@ -81,9 +61,9 @@ public class CSVReader {
                     String.format("It's not a file %s", file)
             );
         }
-        File outFile = new File(argsName.get("out"));
-        if (!("stdout".equals(outFile.getName())
-                || outFile.getName().endsWith(".csv"))) {
+        String outFile = argsName.get("out");
+        if (!("stdout".equals(outFile)
+                || outFile.endsWith(".csv"))) {
             throw new IllegalArgumentException(
                     "Third argument has to be equal \"stdout\" "
                             + "or ended with \".csv\""
