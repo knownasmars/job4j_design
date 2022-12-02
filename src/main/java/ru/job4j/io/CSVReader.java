@@ -11,14 +11,20 @@ public class CSVReader {
              PrintStream out =
                      "stdout".equals(target)
                              ? System.out : new PrintStream(target)) {
-            String[] tmp; String line;
+            String[] tmp;
+            String line;
+            String delimiter = argsName.get("delimiter");
             int[] indexes = getIndexArray(argsName);
             StringBuilder sb = new StringBuilder();
             while (scanner.hasNext()) {
                 line = scanner.nextLine();
-                tmp = line.split(argsName.get("delimiter"));
-                for (int index : indexes) {
-                    sb.append(tmp[index]).append(argsName.get("delimiter"));
+                tmp = line.split(delimiter);
+                for (int i = 0; i < indexes.length; i++) {
+                    if (i == indexes.length - 1) {
+                        sb.append(tmp[indexes[i]]);
+                        break;
+                    }
+                    sb.append(tmp[indexes[i]]).append(delimiter);
                 }
                 out.println(sb);
                 sb.delete(0, sb.length());
