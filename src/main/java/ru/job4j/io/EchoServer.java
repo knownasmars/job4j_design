@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
@@ -7,6 +8,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EchoServer.class.getName());
+
     public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
@@ -26,12 +30,11 @@ public class EchoServer {
                     }
                     out.flush();
                 } catch (IOException ioe) {
-                    LoggerFactory.getLogger(EchoServer.class.getName()).error("Ошибка ВВОДА/ВЫВОДА данных", ioe);
+                    LOG.error("Ошибка ВВОДА/ВЫВОДА данных", ioe);
                 }
             }
         } catch (Exception e) {
-            LoggerFactory.getLogger(
-                    EchoServer.class.getName()).error("Ошибка в основной части кода", e);
+            LOG.error("Ошибка в основной части кода", e);
         }
     }
 }
