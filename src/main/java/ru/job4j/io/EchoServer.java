@@ -1,11 +1,13 @@
 package ru.job4j.io;
 
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
                 Socket socket = server.accept();
@@ -23,8 +25,13 @@ public class EchoServer {
                         out.write("What".getBytes());
                     }
                     out.flush();
+                } catch (IOException ioe) {
+                    LoggerFactory.getLogger(EchoServer.class.getName()).error("Ошибка ВВОДА/ВЫВОДА данных", ioe);
                 }
             }
+        } catch (Exception e) {
+            LoggerFactory.getLogger(
+                    EchoServer.class.getName()).error("Ошибка в основной части кода", e);
         }
     }
 }
