@@ -3,9 +3,6 @@ package ru.job4j.serialization.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.crypto.interfaces.DHPublicKey;
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
         final Person person = new Person(false, 30, new Contact("11-111"),
@@ -17,7 +14,6 @@ public class Main {
         final House house = new House(true, 2, "ZK Javist",
                 car, inhabitants);
         final Gson gson = new GsonBuilder().create();
-//        System.out.println(gson.toJson(person));
         System.out.println(gson.toJson(house));
         final String houseJson  =
                 "{"
@@ -30,20 +26,8 @@ public class Main {
                         + "\"inhabitants\":"
                         + "[\"person3\", \"person4\"]"
                         + "}";
-//        final String personJson =
-//                "{"
-//                        + "\"sex\":false,"
-//                        + "\"age\":35,"
-//                        + "\"contact\":"
-//                        + "{"
-//                        + "\"phone\":\"+7(924)111-111-11-11\""
-//                        + "},"
-//                        + "\"statuses\":"
-//                        + "[\"Student\",\"Free\"]"
-//                        + "}";
-//        final Person personMod = gson.fromJson(personJson, Person.class);
+
         final House houseMod = gson.fromJson(houseJson, House.class);
-//        System.out.println(personMod);
         System.out.println(houseMod);
     }
 }
