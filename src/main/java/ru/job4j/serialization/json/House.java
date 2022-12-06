@@ -20,7 +20,7 @@ public class House {
     @Override
     public String toString() {
         return "House{"
-                + "inhabitedByPerson="+ inhabitedByPerson
+                + "inhabitedByPerson=" + inhabitedByPerson
                 + ", stage=" + stage
                 + ", complexName='" + complexName + '\''
                 + ", car=" + car
