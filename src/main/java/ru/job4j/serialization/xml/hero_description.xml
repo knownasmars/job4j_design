@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hero protogonism= "true" rating= "95" name= "XMLDevelopMan">
+    <abilities ability="XML-Coding"/>
+    <enemies>
+        <boss>LordPetr</boss>
+        <secondenemy>SuperMentor</secondenemy>
+        <firstenemy>EvilMentor</firstenemy>
+    </enemies>
+</hero>
