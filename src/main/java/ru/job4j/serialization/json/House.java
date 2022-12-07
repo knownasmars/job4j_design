@@ -26,4 +26,24 @@ public class House {
                 + ", car=" + car
                 + ", inhabitants=" + Arrays.toString(inhabitants) + '}';
     }
+
+    public boolean isInhabitedByPerson() {
+        return inhabitedByPerson;
+    }
+
+    public int getStage() {
+        return stage;
+    }
+
+    public String getComplexName() {
+        return complexName;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public String[] getInhabitants() {
+        return inhabitants;
+    }
 }

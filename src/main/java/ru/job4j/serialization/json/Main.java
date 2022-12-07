@@ -1,28 +1,30 @@
 package ru.job4j.serialization.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.JsonAdapterAnnotationTypeAdapterFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        final Car car = new Car("Lambo");
-        final String[] inhabitants = new String[]{"person1", "person2"};
+        JSONObject jsonCar = new JSONObject("{\"brand\":\"Ferrari\"}");
+
+        List<String> list = new ArrayList<>();
+        list.add("person1");
+        list.add("person2");
+        JSONArray jsonInhabitants = new JSONArray(list);
+
         final House house = new House(true, 2, "ZK Javist",
-                car, inhabitants);
-        final Gson gson = new GsonBuilder().create();
-        System.out.println(gson.toJson(house));
-        final String houseJson =
-                "{"
-                        + "\"inhabitedByPerson\":true,"
-                        + "\"stage\":15,"
-                        + "\"car\":"
-                        + "{"
-                        + "\"brand\": \"Ferrari\""
-                        + "},"
-                        + "\"inhabitants\":"
-                        + "[\"person3\", \"person4\"]"
-                        + "}";
-        final House houseMod = gson.fromJson(houseJson, House.class);
-        System.out.println(houseMod);
+                new Car("Lambo"), new String[]{"Alex", "Marry"});
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("inhabitedByPerson", house.isInhabitedByPerson());
+        jsonObject.put("stage", house.getStage());
+        jsonObject.put("complexName", house.getComplexName());
+        jsonObject.put("car", jsonCar);
+        jsonObject.put("inhabitants", jsonInhabitants);
+        System.out.println(jsonObject.toString());
+        System.out.println(new JSONObject(house).toString());
     }
 }
