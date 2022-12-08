@@ -13,4 +13,8 @@ public class Car {
                 + "brand='" + brand + '\''
                 + '}';
     }
+
+    public String getBrand() {
+        return brand;
+    }
 }
