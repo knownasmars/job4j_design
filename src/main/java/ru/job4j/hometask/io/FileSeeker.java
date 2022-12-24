@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 1. Программа для поиска файлов.
@@ -16,6 +18,7 @@ import java.util.function.Predicate;
  * 4. Программа должна запускаться с параметрами, например:  -d=c:/ -n=*.?xt -t=mask -o=log.txt
  * 5. Программа должна записывать результат в файл.
  * 6. В программе должна быть валидация ключей и подсказка.
+ * 7. ".*xt"
  */
 
 public class FileSeeker {
@@ -23,17 +26,32 @@ public class FileSeeker {
         validate(args);
         ArgsName values = ArgsName.of(args);
         Path root = Paths.get(values.get("d"));
-        Predicate<Path> condition = Objects::isNull;
-        if ("regexp".equals(values.get("t"))) {
-            condition = p -> p.toFile().getName().;
+        Predicate<Path> condition = null;
+        if ("regex".equals(values.get("t"))) {
+            condition = p -> p.toFile()
+                    .getName()
+                    .matches(values.get("n"));
         }
         if ("mask".equals(values.get("t"))) {
-
-            condition = p -> p.toFile().getName().contains("");
-
+            String mask = values.get("n");
+            String tmp = "";
+            System.out.println(mask);
+            if (mask.contains(".")) {
+                tmp = mask.replace(".", "*");
+            }
+            if (mask.contains("*")) {
+                tmp = mask.replace("*", "\\B");
+            }
+            final String newRegex = tmp;
+            System.out.println(newRegex);
+            condition = p -> p.toFile()
+                    .getName()
+                    .matches(newRegex);
         }
         if ("name".equals(values.get("t"))) {
-            condition = p -> p.toFile().getName().endsWith(values.get("n"));
+            condition = p -> p.toFile()
+                    .getName()
+                    .endsWith(values.get("n"));
         }
         write(values, searcher(root, condition));
     }
