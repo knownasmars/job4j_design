@@ -33,11 +33,14 @@ public class FileSeeker {
             String mask = values.get("n");
             String tmp = "";
             System.out.println(mask);
+            if (mask.contains(".")) {
+                tmp = mask.replace(".", "[.]");
+            }
             if (mask.contains("*")) {
-                tmp = mask.replace("*", ".");
+                tmp = mask.replace("*", ".*");
             }
             if (tmp.contains("?")) {
-                tmp = tmp.replace("?", "*");
+                tmp = tmp.replace("?", ".");
             }
             final String newRegex = tmp;
             System.out.println(newRegex);
@@ -82,7 +85,8 @@ public class FileSeeker {
             throw new IllegalArgumentException(
                     "Number of arguments is not valid");
         }
-        File file = new File(args[0]);
+        ArgsName values = ArgsName.of(args);
+        File file = new File(values.get("d"));
         if (!Files.exists(file.toPath())) {
             throw new IllegalArgumentException(
                     String.format("Not exist %s", file.toPath()));
@@ -99,9 +103,9 @@ public class FileSeeker {
             throw new IllegalArgumentException(
                     "The file must have \".txt\" format");
         }
-        if (!"mask".equals(args[2])
-                && !"name".equals(args[2])
-                && !"regex".equals(args[2])) {
+        if (!"mask".equals(values.get("t"))
+                && !"name".equals(values.get("t"))
+                && !"regex".equals(values.get("t"))) {
             throw new IllegalArgumentException(
                     "Check out the input parameters. It might be \"name\", \"mask\" or \"regex\"");
         }
