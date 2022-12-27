@@ -32,7 +32,6 @@ public class FileSeeker {
         if ("mask".equals(values.get("t"))) {
             String mask = values.get("n");
             String tmp = "";
-            System.out.println(mask);
             if (mask.contains(".")) {
                 tmp = mask.replace(".", "[.]");
             }
@@ -43,7 +42,6 @@ public class FileSeeker {
                 tmp = tmp.replace("?", ".");
             }
             final String newRegex = tmp;
-            System.out.println(newRegex);
             condition = p -> p.toFile()
                     .getName()
                     .matches(newRegex);
