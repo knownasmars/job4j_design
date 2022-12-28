@@ -1,4 +1,3 @@
-	
 -- CREATE TABLES FOR RELATIONS BASE STRUCTURE 
 -- users - role = many-to-one 
 CREATE TABLE roles(
