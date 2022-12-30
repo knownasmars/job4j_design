@@ -3,7 +3,7 @@ create table type(
 	name varchar(255)
 );
 
-create table products(
+create table product(
 	id serial primary key,
 	name varchar(255),
 	type_id int references type(id),
