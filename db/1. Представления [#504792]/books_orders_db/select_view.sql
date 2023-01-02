@@ -1,0 +1,1 @@
+select * from non_active_orders_with_2_or_more_books
