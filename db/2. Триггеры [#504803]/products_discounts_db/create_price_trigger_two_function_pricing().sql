@@ -2,13 +2,14 @@ create or replace function pricing()
     returns trigger as
 $$
     BEGIN
-        update products
-        set price = price - price * 0.2
-        where id = (select id from inserted);
+		new.name = new.name;
+		new.price = new.price;
+		new.date = new.date;
         return new;
     END;
 $$
-LANGUAGE 'plpgsql';
+language 'plpgsql';
+
 create trigger price_trigger_two
     before insert on products
     for each row
