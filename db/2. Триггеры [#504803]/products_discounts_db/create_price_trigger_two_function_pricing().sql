@@ -2,9 +2,7 @@ create or replace function pricing()
     returns trigger as
 $$
     BEGIN
-		new.name = new.name;
-		new.price = new.price;
-		new.date = new.date;
+		new.price = new.price + new.price * 0.2;
         return new;
     END;
 $$
