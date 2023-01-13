@@ -1,8 +1,5 @@
 package ru.job4j.spammer;
 
-import ru.job4j.jdbc.StatementDemo;
-import ru.job4j.jdbc.TableEditor;
-
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
