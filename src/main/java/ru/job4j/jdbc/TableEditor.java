@@ -43,10 +43,9 @@ public class TableEditor implements AutoCloseable {
 
     public void createTable(String tableName) throws SQLException {
         String sql = String.format(
-                "create table if not exists %s(%s, %s);",
+                "create table if not exists %s(%s);",
                 tableName,
-                "id serial primary key",
-                "name text"
+                "id serial primary key"
         );
         createStatement(sql);
     }
@@ -121,20 +120,22 @@ public class TableEditor implements AutoCloseable {
                 .getResourceAsStream(
                         "resources.properties")) {
             properties.load(in);
-            TableEditor te = new TableEditor(properties);
-            String tableName = "demo_table";
-            te.createTable(tableName);
-            System.out.println(te.getTableScheme(tableName));
-            te.dropTable(tableName);
-            System.out.println(te.getTableScheme(tableName));
-            te.createTable(tableName);
-            System.out.println(te.getTableScheme(tableName));
-            te.addColumn(tableName, "age", "integer");
-            System.out.println(te.getTableScheme(tableName));
-            te.dropColumn(tableName, "age");
-            System.out.println(te.getTableScheme(tableName));
-            te.renameColumn(tableName, "id", "id_number");
-            System.out.println(te.getTableScheme(tableName));
+            try (TableEditor te =
+                        new TableEditor(properties)) {
+                String tableName = "demo_table";
+                te.createTable(tableName);
+                System.out.println(te.getTableScheme(tableName));
+                te.dropTable(tableName);
+                System.out.println(te.getTableScheme(tableName));
+                te.createTable(tableName);
+                System.out.println(te.getTableScheme(tableName));
+                te.addColumn(tableName, "age", "integer");
+                System.out.println(te.getTableScheme(tableName));
+                te.dropColumn(tableName, "age");
+                System.out.println(te.getTableScheme(tableName));
+                te.renameColumn(tableName, "id", "id_number");
+                System.out.println(te.getTableScheme(tableName));
+            }
         } catch (SQLException sqlex) {
             sqlex.getErrorCode();
         } catch (Exception e) {
