@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class ConnectionDemo {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Config cfg = new Config(
-                "C:\\projects\\job4j_design\\src\\main\\java\\ru\\job4j\\jdbc\\jdbcadd.properties");
+                "./../jdbcadd.properties");
         cfg.load();
         Class.forName(cfg.value("jdbc.driver_class"));
         String url = cfg.value("jdbc.url");
