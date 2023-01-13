@@ -28,7 +28,13 @@ public class ImportDB {
                     throw new IllegalArgumentException(
                             "Number of arguments has to be equal two");
                 }
-                users.add(new User(lines[0], lines[1]));
+                if (lines[0].isBlank() || lines[1].isBlank()) {
+                    throw new IllegalArgumentException(
+                            "Arguments cannot be empty"
+                    );
+                }
+                users.add(
+                        new User(lines[0], lines[1]));
             });
         }
         return users;
